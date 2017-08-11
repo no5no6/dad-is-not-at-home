@@ -1,10 +1,10 @@
-var moment = require('moment');
+const moment = require('moment');
 
 /** 通用时间对象 */
-module.exports = { 
+module.exports = {
   // 毫秒
   dateNumber: {type: Number, default: Date.now},
-  
+
   // 格式 YYYY-MM-DD
   dateString: {type: String, default: (function(){return moment().format('YYYY-MM-DD');})},
 
@@ -19,7 +19,7 @@ module.exports = {
 
   // 部门
   department: String,
-  
+
   departmentId: String,
 
   // 部门领导

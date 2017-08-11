@@ -1,12 +1,12 @@
-var mongoose      = require('mongoose');
-var async         = require('async');
-var event_emitter = new (require('events').EventEmitter);
-var fs            = require('fs');
-var _             = require('lodash');
+const mongoose      = require('mongoose');
+const async         = require('async');
+const event_emitter = new (require('events').EventEmitter);
+const fs            = require('fs');
+const _             = require('lodash');
 
-var models_cache = {};
+let models_cache = {};
 
-module.exports = function(host, callback) {
+module.exports = (host, callback) => {
 
   if (models = models_cache[host]) return callback(null, models);
 
@@ -15,12 +15,12 @@ module.exports = function(host, callback) {
     callback(null, models);
   });
 
-  fs.readdir(__dirname, function(err, files) {
+  fs.readdir(__dirname, (err, files) => {
 
     mongoose.Promise = global.Promise;
-    connection = mongoose.createConnection('mongodb://ky1:123@localhost:27017/questionnaire');
+    connection = mongoose.createConnection('mongodb://yy:123@localhost:27017/family');
 
-    var models = files.reduce(function(models, file) {
+    let models = files.reduce((models, file) => {
       if (!fs.statSync(__dirname + '/' + file).isDirectory()) {
         return models;
       }
@@ -36,8 +36,8 @@ module.exports = function(host, callback) {
       return models
     }, {});
 
-    tasks = (function() {
-      var results = [];
+    tasks = (() => {
+      let results = [];
       for (key in models) {
         model = models[key];
         if (model.cache) {
@@ -47,7 +47,7 @@ module.exports = function(host, callback) {
       return results;
     })();
 
-    async.parallel(tasks, function(error) {
+    async.parallel(tasks, (error) => {
       if (error) return callback(error);
       event_emitter.emit(host, models_cache[host] = models);
     });

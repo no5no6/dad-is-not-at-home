@@ -1,8 +1,8 @@
-var mongoose = require('mongoose');
-var Schema   = mongoose.Schema;
-var ObjectId = Schema.ObjectId;
+const mongoose = require('mongoose');
+const Schema   = mongoose.Schema;
+const ObjectId = Schema.ObjectId;
 
-var seqSchema = {
+let seqSchema = {
   _id: String,
   seq: Number
 }
@@ -10,15 +10,14 @@ var seqSchema = {
 seqSchema = new Schema(seqSchema, { versionKey: false });
 
 seqSchema.statics.retrieveIdentity = function(type, cb) {
-  this.findByIdAndUpdate(type, {$inc:{seq:1}}, {upsert: true}, function(err, data){
+  this.findByIdAndUpdate(type, {$inc:{seq:1}}, {upsert: true}, (err, data) => {
     if(err) return cb(err);
     cb(null, data.seq);
   })
 }
 
 seqSchema.statics.retrieveBarcode = function(type, cb) {
-  var _this = this;
-  this.retrieveIdentity(type, function(err, identity){
+  this.retrieveIdentity(type, (err, identity) => {
     if(err) return cb(err);
     cb(null, identity);
   });

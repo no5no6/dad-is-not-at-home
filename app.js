@@ -1,18 +1,17 @@
 /**
  * 主服务
  */
-var express = require('express');
-var session = require("express-session");
+// var session = require("express-session");
 // var RedisStore = require('connect-redis')(session);
-var http    = require('http');
-var path    = require('path');
-var app     = express();
-var models  = require("./models");
-var event   = require('./models/Shared/event.js');
-var host    = 'localhost';
+const express = require('express');
+const http    = require('http');
+const path    = require('path');
+const models  = require('./models');
+const event   = require('./models/Shared/event.js');
 
+const app     = express();
 // express对象赋给全局
-global.app  = app;
+global.app    = app;
 
 // express设置
 app.set('port', process.env.PORT || 3000);
@@ -38,7 +37,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 //   saveUninitialized: true
 // }));
 
-app.use(function(req,res,next){
+app.use((req,res,next) => {
   if (!req.session.userName) {
     res.redirect('/web/question')
     next();
@@ -48,11 +47,11 @@ app.use(function(req,res,next){
 });
 
 // 解决跨域
-var origin = [/\/user/, /\/user\/*/];
+const origin = [/\/user/, /\/user\/*/];
 
-app.all('*', function(req, res, next){
+app.all('*', (req, res, next) => {
 
-  var istrue = origin.some(function(url){
+  let istrue = origin.some((url) => {
     return url.test(req.path);
   });
 
@@ -72,7 +71,7 @@ app.all('*', function(req, res, next){
 });
 
 // 根据请求域名得到Mongoose模型。
-models(host, function(err, models){
+models('localhost', (err, models) => {
   if(err) return res.send(400,err.stack);
   app.models = models;
   app.event = event
@@ -87,10 +86,10 @@ require('./routes/user/addUser');
 require('./routes/user/login');
 
 // 首页
-app.get('/', function(req, res){
+app.get('/', (req, res) => {
   res.render('index', { title: 'Express' });
 });
 
-http.createServer(app).listen(app.get('port'), function(){
+http.createServer(app).listen(app.get('port'), () => {
   console.log('Express server listening on port ' + app.get('port'));
 });
