@@ -37,14 +37,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 //   saveUninitialized: true
 // }));
 
-app.use((req,res,next) => {
-  if (!req.session.userName) {
-    res.redirect('/web/question')
-    next();
-  }else {
-    next();
-  }
-});
+// app.use((req,res,next) => {
+//   if (!req.session.userName) {
+//     res.redirect('/web/question')
+//     next();
+//   }else {
+//     next();
+//   }
+// });
 
 // 解决跨域
 const origin = [/\/user/, /\/user\/*/];

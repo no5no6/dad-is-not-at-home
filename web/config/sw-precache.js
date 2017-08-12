@@ -17,7 +17,7 @@ module.exports = {
      * @type {Object}
      */
     build: {
-        cacheId: 'sw-cache-dad-is-not-at-home',
+        cacheId: 'sw-cache-web',
 
         filename: 'service-worker.js',
 

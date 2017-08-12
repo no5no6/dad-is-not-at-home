@@ -15,10 +15,10 @@ module.exports = {
     swPrecache: swPrecacheConfig,
     build: {
         env: require('./prod.env'),
-        index: path.resolve(__dirname, '../dist/index.html'),
-        assetsRoot: path.resolve(__dirname, '../dist'),
+        index: path.resolve(__dirname, '../../public/web/index.html'),
+        assetsRoot: path.resolve(__dirname, '../../public/web/'),
         assetsSubDirectory: 'static',
-        assetsPublicPath: '/',
+        assetsPublicPath: '/web/',
         productionSourceMap: true,
 
         // Gzip off by default as many popular static hosts such as
