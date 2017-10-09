@@ -1,52 +1,40 @@
-/**
- * @file 生产环境构建入口
- * @author no5no6(work_yuanyang@163.com)
- */
+require('./check-versions')()
 
-/* eslint-disable no-console */
+process.env.NODE_ENV = 'production'
 
-'use strict';
+var ora = require('ora')
+var rm = require('rimraf')
+var path = require('path')
+var chalk = require('chalk')
+var webpack = require('webpack')
+var config = require('../config')
+var webpackConfig = require('./webpack.prod.conf')
 
-require('./check-versions')();
+var spinner = ora('building for production...')
+spinner.start()
 
-process.env.NODE_ENV = 'production';
+rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
+  if (err) throw err
+  webpack(webpackConfig, function (err, stats) {
+    spinner.stop()
+    if (err) throw err
+    process.stdout.write(stats.toString({
+      colors: true,
+      modules: false,
+      children: false,
+      chunks: false,
+      chunkModules: false
+    }) + '\n\n')
 
-const ora = require('ora');
-const rm = require('rimraf');
-const path = require('path');
-const chalk = require('chalk');
-const webpack = require('webpack');
-const config = require('../config');
-const webpackConfig = require('./webpack.prod.conf');
-
-let spinner = ora('building for production...');
-spinner.start();
-
-rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), function (err) {
-    if (err) {
-        throw err;
+    if (stats.hasErrors()) {
+      console.log(chalk.red('  Build failed with errors.\n'))
+      process.exit(1)
     }
-    webpack(webpackConfig, function (err, stats) {
-        spinner.stop();
-        if (err) {
-            throw err;
-        }
-        process.stdout.write(stats.toString({
-            colors: true,
-            modules: false,
-            children: false,
-            chunks: false,
-            chunkModules: false
-        }) + '\n\n');
 
-        console.log(chalk.cyan('  Build complete.\n'));
-        console.log(chalk.yellow(''
-            + '  Tip: built files are meant to be served over an HTTP server.\n'
-            + '  Opening index.html over file:// won\'t work.\n'
-        ));
-
-        if (!process.env.npm_config_report) {
-            process.exit();
-        }
-    });
-});
+    console.log(chalk.cyan('  Build complete.\n'))
+    console.log(chalk.yellow(
+      '  Tip: built files are meant to be served over an HTTP server.\n' +
+      '  Opening index.html over file:// won\'t work.\n'
+    ))
+  })
+})

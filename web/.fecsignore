@@ -1,5 +1,0 @@
-node_modules
-dist
-static
-config/sw.tmpl.js
-*.index.html
